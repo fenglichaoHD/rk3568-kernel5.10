@@ -82,7 +82,9 @@
     model = "rp-rk3568";
     compatible = "rpdzkj,rp-rk3568-v10", "rockchip,rk3568";
     
-
+	chosen: chosen {
+		bootargs = "earlycon=uart8250,mmio32,0xfe660000 console=ttyFIQ0 root=PARTUUID=614e0000-0000 rw rootwait";
+	};
         
         rp_power{
                 status = "okay";
@@ -135,21 +137,47 @@
                 
         };
 
+ 	vcc5v0_usb20_host: vcc5v0-usb20-host-regulator {
+		compatible = "regulator-fixed";
+		enable-active-high;
+		gpio = <&gpio0 RK_PD5 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&vcc5v0_usb20_host_en>;
+		regulator-name = "vcc5v0_usb20_host";
+		regulator-always-on;
+	};
 
-
+	vcc5v0_usb30_host: vcc5v0-usb30-host-regulator {
+		compatible = "regulator-fixed";
+		enable-active-high;
+		gpio = <&gpio0 RK_PD6 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&vcc5v0_usb30_host_en>;
+		regulator-name = "vcc5v0_usb30_host";
+		regulator-always-on;
+	};   
+	vcc5v0_otg_vbus: vcc5v0-otg-vbus-regulator {
+		compatible = "regulator-fixed";
+		enable-active-high;
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
+		gpio = <&gpio0 RK_PA5 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&vcc5v0_otg_vbus_en>;
+		regulator-name = "vcc5v0_otg_vbus";
+	};
         rp_gpio{
                 status = "okay";
                 compatible = "rp_gpio";
 
         };
-
         fiq-debugger {
                 compatible = "rockchip,fiq-debugger";
                 rockchip,serial-id = <2>;
                 rockchip,wake-irq = <0>;
                 /* If enable uart uses irq instead of fiq */
                 rockchip,irq-mode-enable = <1>;
-                rockchip,baudrate = <115200>;  /* Only 115200 and 1500000 */
+                rockchip,baudrate = <1500000>;  /* Only 115200 and 1500000 */
                 interrupts = <GIC_SPI 252 IRQ_TYPE_LEVEL_LOW>;
                 pinctrl-names = "default";
                 pinctrl-0 = <&uart2m0_xfer>;
@@ -314,6 +342,20 @@
             rockchip,pins = <4 RK_PC2 RK_FUNC_GPIO &pcfg_pull_down>;
         };
     };
+
+    	usb {
+		vcc5v0_usb20_host_en: vcc5v0-usb20-host-en {
+			rockchip,pins = <0 RK_PD5 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
+		vcc5v0_usb30_host_en: vcc5v0-usb30-host-en {
+			rockchip,pins = <0 RK_PD6 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
+		vcc5v0_otg_vbus_en: vcc5v0-otg-vbus-en {
+			rockchip,pins = <0 RK_PA5 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};
 };
 
     

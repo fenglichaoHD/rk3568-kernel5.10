@@ -834,7 +834,7 @@
     pinctrl-names = "default";
     pinctrl-0 = <&sdmmc2m0_bus4 &sdmmc2m0_cmd &sdmmc2m0_clk>;
     sd-uhs-sdr104;
-    status = "okay";
+    status = "disabled";
 };
 
 &sfc {
